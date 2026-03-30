@@ -1,3 +1,3 @@
 # Deployment Guide
 
-See alternatives like Render, Fly.io, or DigitalOcean instead.
+See [FLY_SETUP.md](FLY_SETUP.md) for Fly.io deployment (recommended - free tier).

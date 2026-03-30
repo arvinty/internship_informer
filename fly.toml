@@ -1,0 +1,18 @@
+# fly.toml app configuration file generated for internship-informer
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+
+app = "internship-informer"
+primary_region = "sin"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  CHECK_INTERVAL = "300"
+
+[[services]]
+  internal_port = 5000
+  processes = ["app"]
+
+  [services.tcp_checks]
+    enabled = false
