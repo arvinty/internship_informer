@@ -8,7 +8,7 @@ Automatically monitor internships on internsg.com and receive Telegram notificat
 - 📱 Real-time Telegram notifications for new postings
 - 💾 PostgreSQL database to track seen jobs and prevent duplicates
 - 🐳 Docker containerized for easy deployment
-- 🚀 Ready for fly.io deployment
+- 🚀 Ready for Fly.io deployment
 - ⏱️ Configurable check intervals
 
 ## Prerequisites
@@ -17,7 +17,7 @@ Before you start, you'll need:
 
 1. **Telegram Bot Token** - Create a bot via [@BotFather](https://t.me/botfather) on Telegram
 2. **Telegram Chat ID** - Send a message to your bot and get your chat ID from the bot updates
-3. **Railway Account** - Sign up at [railway.app](https://railway.app)
+3. **Fly.io Account** - Sign up at [fly.io](https://fly.io)
 
 ## Local Setup
 
@@ -50,9 +50,7 @@ Edit `.env` with your credentials:
 ```env
 TELEGRAM_BOT_TOKEN=123456:ABCdefGHIjklMNOpqrsTUVwxyz
 TELEGRAM_CHAT_ID=123456789
-DB_USER=intern_bot
-DB_PASSWORD=your_secure_password
-DB_NAME=intern_jobs
+DATABASE_URL=postgresql://user:password@localhost:5432/intern_jobs
 CHECK_INTERVAL=300
 ```
 
@@ -72,57 +70,77 @@ Stop:
 docker-compose down
 ```
 
-## Railway Deployment
+## Fly.io Deployment
 
-### Step 1: Prepare Your Repository
+### Step 1: Install Fly CLI
 
-Push your code to GitHub:
+Download and install the Fly CLI from [fly.io/docs/getting-started/installing-flyctl](https://fly.io/docs/getting-started/installing-flyctl/)
+
+### Step 2: Authenticate with Fly.io
 
 ```bash
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin https://github.com/yourusername/intern-bot.git
-git push -u origin main
+flyctl auth login
 ```
 
-### Step 2: Deploy on Railway
+### Step 3: Initialize Your App
 
-1. Go to [railway.app](https://railway.app) and sign up
-2. Click "New Project" → "Deploy from GitHub repo"
-3. Select your `intern-bot` repository
-4. Railway will automatically detect the Dockerfile
+In your project directory:
 
-### Step 3: Configure Environment Variables
-
-In Railway dashboard:
-
-1. Go to your project
-2. Select the service
-3. Click "Variables" tab
-4. Add the following environment variables:
-
-```
-TELEGRAM_BOT_TOKEN=your_bot_token
-TELEGRAM_CHAT_ID=your_chat_id
-DATABASE_URL=postgresql://user:password@host:port/dbname
-CHECK_INTERVAL=300
+```bash
+flyctl launch
 ```
 
-### Step 4: Add PostgreSQL Database
+This will:
+- Create a `fly.toml` configuration file
+- Detect your Dockerfile
+- Prompt you to set up PostgreSQL
 
-1. In Railway project, click "New"
-2. Select "PostgreSQL"
-3. Railway will automatically set `DATABASE_URL` in your environment
+When prompted, select:
+- **App name**: Choose a name (e.g., `internship-informer-bot`)
+- **Region**: Select your preferred region
+- **Add PostgreSQL?**: Yes (Fly.io will provision a database)
+
+### Step 4: Set Environment Variables
+
+```bash
+flyctl secrets set TELEGRAM_BOT_TOKEN=your_bot_token
+flyctl secrets set TELEGRAM_CHAT_ID=your_chat_id
+```
+
+Fly.io will automatically set `DATABASE_URL` from the PostgreSQL database it created.
 
 ### Step 5: Deploy
 
-Railway will automatically deploy when you push to the main branch.
+```bash
+flyctl deploy
+```
 
-View logs:
-- Click on your service in Railway dashboard
-- Select "Logs" tab
+To monitor deployment:
+```bash
+flyctl logs
+```
+
+## Managing Your Deployment
+
+### View logs
+```bash
+flyctl logs
+```
+
+### Check status
+```bash
+flyctl status
+```
+
+### Update environment variables
+```bash
+flyctl secrets set VARIABLE_NAME=value
+```
+
+### Scale (if needed)
+```bash
+flyctl scale count=1
+```
 
 ## Environment Variables
 
@@ -130,7 +148,7 @@ View logs:
 |----------|-------------|---------|
 | `TELEGRAM_BOT_TOKEN` | Your Telegram bot token | Required |
 | `TELEGRAM_CHAT_ID` | Your Telegram chat ID | Required |
-| `DATABASE_URL` | PostgreSQL connection string | Required |
+| `DATABASE_URL` | PostgreSQL connection string | Auto-set by Fly.io |
 | `CHECK_INTERVAL` | Seconds between job checks | 300 |
 
 ## How It Works
@@ -147,12 +165,12 @@ View logs:
 
 1. Check the bot token is correct: `https://api.telegram.org/botYOUR_TOKEN/getMe`
 2. Verify chat ID is correct
-3. Check logs: `docker-compose logs bot`
+3. Check logs: `flyctl logs`
 
 ### Database connection errors
 
-1. Ensure PostgreSQL is running
-2. Check `DATABASE_URL` format
+1. Ensure DATABASE_URL is set correctly
+2. Check Fly.io PostgreSQL status: `flyctl postgres status`
 3. Verify database credentials
 
 ### No jobs found
@@ -179,6 +197,16 @@ pip install -r requirements.txt
 
 # Run bot
 python bot.py
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+python -m pytest tests/test_telegram_notifications.py -v
+
+# Run specific test
+python -m pytest tests/test_telegram_notifications.py::TestTelegramNotifications::test_notification_speed -v
 ```
 
 ## License

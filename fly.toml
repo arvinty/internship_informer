@@ -1,18 +1,21 @@
-# fly.toml app configuration file generated for internship-informer
+# fly.toml app configuration file generated for internship-informer-bot on 2026-03-31T21:47:00+08:00
+#
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
-app = "internship-informer"
-primary_region = "sin"
+app = 'internship-informer-bot'
+primary_region = 'sin'
 
 [build]
-  dockerfile = "Dockerfile"
+  dockerfile = 'Dockerfile'
 
 [env]
-  CHECK_INTERVAL = "300"
+  CHECK_INTERVAL = '300'
 
-[[services]]
-  internal_port = 5000
-  processes = ["app"]
+[processes]
+  app = 'python bot.py'
 
-  [services.tcp_checks]
-    enabled = false
+[[vm]]
+  memory = '1gb'
+  cpus = 1
+  memory_mb = 1024

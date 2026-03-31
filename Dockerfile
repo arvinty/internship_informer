@@ -8,6 +8,11 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     libssl-dev \
     libffi-dev \
+    libnss3 \
+    libxss1 \
+    libxslt1.1 \
+    libxrandr2 \
+    libasound2 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
