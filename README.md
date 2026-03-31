@@ -8,7 +8,7 @@ Automatically monitor internships on internsg.com and receive Telegram notificat
 - 📱 Real-time Telegram notifications for new postings
 - 💾 PostgreSQL database to track seen jobs and prevent duplicates
 - 🐳 Docker containerized for easy deployment
-- 🚀 Ready for Railway deployment
+- 🚀 Ready for fly.io deployment
 - ⏱️ Configurable check intervals
 
 ## Prerequisites
