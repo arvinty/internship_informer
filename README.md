@@ -74,12 +74,12 @@ docker-compose down
 
 ### Step 1: Install Fly CLI
 
-Download and install the Fly CLI from [fly.io/docs/getting-started/installing-flyctl](https://fly.io/docs/getting-started/installing-flyctl/)
+Download and install the Fly CLI from fly.io
 
 ### Step 2: Authenticate with Fly.io
 
 ```bash
-flyctl auth login
+fly auth login
 ```
 
 ### Step 3: Initialize Your App
@@ -87,7 +87,7 @@ flyctl auth login
 In your project directory:
 
 ```bash
-flyctl launch
+fly launch
 ```
 
 This will:
@@ -103,8 +103,8 @@ When prompted, select:
 ### Step 4: Set Environment Variables
 
 ```bash
-flyctl secrets set TELEGRAM_BOT_TOKEN=your_bot_token
-flyctl secrets set TELEGRAM_CHAT_ID=your_chat_id
+fly secrets set TELEGRAM_BOT_TOKEN=your_bot_token
+fly secrets set TELEGRAM_CHAT_ID=your_chat_id
 ```
 
 Fly.io will automatically set `DATABASE_URL` from the PostgreSQL database it created.
@@ -112,34 +112,34 @@ Fly.io will automatically set `DATABASE_URL` from the PostgreSQL database it cre
 ### Step 5: Deploy
 
 ```bash
-flyctl deploy
+fly deploy
 ```
 
 To monitor deployment:
 ```bash
-flyctl logs
+fly logs
 ```
 
 ## Managing Your Deployment
 
 ### View logs
 ```bash
-flyctl logs
+fly logs
 ```
 
 ### Check status
 ```bash
-flyctl status
+fly status
 ```
 
 ### Update environment variables
 ```bash
-flyctl secrets set VARIABLE_NAME=value
+fly secrets set VARIABLE_NAME=value
 ```
 
 ### Scale (if needed)
 ```bash
-flyctl scale count=1
+fly scale count=1
 ```
 
 ## Environment Variables
@@ -165,12 +165,12 @@ flyctl scale count=1
 
 1. Check the bot token is correct: `https://api.telegram.org/botYOUR_TOKEN/getMe`
 2. Verify chat ID is correct
-3. Check logs: `flyctl logs`
+3. Check logs: `fly logs`
 
 ### Database connection errors
 
 1. Ensure DATABASE_URL is set correctly
-2. Check Fly.io PostgreSQL status: `flyctl postgres status`
+2. Check Fly.io PostgreSQL status: `fly postgres status`
 3. Verify database credentials
 
 ### No jobs found
